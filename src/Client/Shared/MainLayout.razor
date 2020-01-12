@@ -1,0 +1,40 @@
+﻿@inherits LayoutComponentBase
+<div class="myFixCentered" style="@bgColor">
+    <p>X: @mouseX</p>
+    <p>Y: @mouseY</p>
+</div>
+<div class="sidebar" @onmousemove="@((args)=> MouseMove(args))" @onmouseup="@MouseUp" @onmousedown="@MouseDown">
+    <NavMenu />
+</div>
+
+<div class="main" @onmousemove="@((args)=> MouseMove(args))" @ondragend="@MouseUp" @ondragstart="@MouseDown">
+    <div class="content px-4">
+        @Body
+    </div>
+</div>
+
+@code
+{
+    private double mouseX;
+    private double mouseY;
+    private string bgColor = "background-color:white;";
+
+    // background-color:red;
+    // background-color:white;
+
+    public void MouseMove(MouseEventArgs args)
+    {
+        mouseX = args.ClientX;
+        mouseY = args.ClientY;
+    }
+
+    public void MouseDown()
+    {
+        bgColor = "background-color:red;";
+    }
+
+    public void MouseUp()
+    {
+        bgColor = "background-color:white;";
+    }
+}
