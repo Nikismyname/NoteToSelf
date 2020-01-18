@@ -1,0 +1,75 @@
+﻿@page "/notes"
+@using NoteToSelf.Client.Components;
+@using NoteToSelf.Shared.Models;
+
+<MyContainer Items="Items"></MyContainer>
+
+@code {
+    List<ItemData> Items = new List<ItemData>();
+
+    protected override void OnInitialized()
+    {
+        var counter = 1;
+
+        Items.Add(new ItemData
+        {
+            Id = 1,
+            LastUpdated = DateTime.Now,
+            Text = "one 1",
+            X = 1,
+            Y = 1, 
+        });
+
+        Items.Add(new ItemData
+        {
+            Id =2,
+            LastUpdated = DateTime.Now,
+            Text = "one 2",
+            X = 1,
+            Y = 2,
+        });
+
+        Items.Add(new ItemData
+        {
+            Id =3,
+            LastUpdated = DateTime.Now,
+            Text = "one 3",
+            X = 1,
+            Y = 3,
+        });
+
+        Items.Add(new ItemData
+        {
+            Id =4,
+            LastUpdated = DateTime.Now,
+            Text = "one 4",
+            X = 1,
+            Y = 4,
+        });
+
+        Items.Add(new ItemData
+        {
+            Id = 5,
+            LastUpdated = DateTime.Now,
+            Text = "one 5",
+            X = 2,
+            Y = 1,
+        });
+
+        Items.Add(new ItemData
+        {
+            Id = 6,
+            LastUpdated = DateTime.Now,
+            Text = "one 6",
+            X = 3,
+            Y = 1,
+        });
+
+        counter++;
+    }
+
+    void HandleStatusUpdated(ItemData updatedJob)
+    {
+        Console.WriteLine(updatedJob.Text);
+    }
+}

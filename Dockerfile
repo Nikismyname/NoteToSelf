@@ -5,4 +5,4 @@ COPY ./src/. ./
 
 RUN dotnet publish ./Server/*.csproj -c Release
 
-CMD ASPNETCORE_URLS=http://*:$PORT dotnet NoteToSelf.Server.dll
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet Server/bin/Release/netcoreapp3.1/NoteToSelf.Server.dll

@@ -1,0 +1,17 @@
+﻿<h3>Two</h3>
+
+@code {
+    int localNum;
+    [Parameter] public int LocalNum
+    {
+        get
+        {
+            return localNum;
+        }
+        set
+        {
+            localNum = value;
+            Console.WriteLine(value);
+        }
+    }
+}

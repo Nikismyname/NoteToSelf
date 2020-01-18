@@ -1,0 +1,15 @@
+﻿<h3>One</h3>
+
+<button @onclick="OnClick">ONE</button>
+<span>@Num</span>
+<Two LocalNum="Num"></Two>
+
+@code {
+
+    public int Num { get; set; } = 0;
+
+    void OnClick()
+    {
+        Num++;
+    }
+}

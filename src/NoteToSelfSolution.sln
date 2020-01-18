@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteToSelf.Server", "Server\NoteToSelf.Server.csproj", "{A95926F6-3BF8-496C-884A-1E0410925401}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteToSelf.Server", "Server\NoteToSelf.Server.csproj", "{A95926F6-3BF8-496C-884A-1E0410925401}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteToSelf.Client", "Client\NoteToSelf.Client.csproj", "{5A731072-2AB5-4A24-87E1-D3C3D42B3613}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteToSelf.Client", "Client\NoteToSelf.Client.csproj", "{5A731072-2AB5-4A24-87E1-D3C3D42B3613}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteToSelf.Shared", "Shared\NoteToSelf.Shared.csproj", "{2FB47730-F0CB-445A-919A-B9D167F1D05F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteToSelf.Shared", "Shared\NoteToSelf.Shared.csproj", "{2FB47730-F0CB-445A-919A-B9D167F1D05F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

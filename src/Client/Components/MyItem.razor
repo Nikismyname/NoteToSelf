@@ -1,0 +1,44 @@
+﻿@using NoteToSelf.Shared.Models
+
+<li 
+    class="draggable @invisibleClass" 
+    draggable="true" 
+    title="@Item.Id" 
+    @ondragstart="@(() => HandleDragStart(Item))"
+    @ondragenter="@((e)=> HandleDragEnter(e))"
+>
+    <p>TI: @Item.IsTopItem</p>
+    <p>ID: @Item.Id</p>
+    <p>Y: @Item.Y</p>
+    <p class="description">@Item.Text</p>
+    <p class="last-updated"><small>Last Updated</small> @Item.LastUpdated.ToString("HH:mm.ss tt")</p>
+</li>
+
+@code {
+    [CascadingParameter] MyContainer MyContainer { get; set; }
+    [Parameter] public ItemData Item { get; set; }
+
+    private string invisibleClass = string.Empty;
+
+    protected override void OnParametersSet()
+    {
+        if (Item.IsTopItem && Item.Id != -1)
+        {
+            Console.WriteLine($"ID: {Item.Id}");
+            this.invisibleClass = "myInvisibleItem";
+        }
+    }
+
+    private void HandleDragStart(ItemData selectedJob)
+    {
+        MyContainer.CurrentItem = selectedJob;
+    }
+
+    private void HandleDragEnter(DragEventArgs args)
+    {
+        if (Item.Id != -1)
+        {
+            MyContainer.TEST(Item);
+        }
+    }
+}

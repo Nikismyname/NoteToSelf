@@ -1,0 +1,23 @@
+﻿@using NoteToSelf.Shared.Models;
+
+<div class="jobs-container">
+    <CascadingValue Value="this">
+        <MyList X="1" DraggedOver="DraggedOver"/>
+        <MyList X="2" DraggedOver="DraggedOver"/>
+        <MyList X="3" DraggedOver="DraggedOver"/>
+    </CascadingValue>
+</div>
+
+@code {
+    [Parameter] public List<ItemData> Items { get; set; }
+
+    public ItemData CurrentItem { get; set; }
+
+    public ItemData DraggedOver { get; set; }
+
+    public void TEST(ItemData data)
+    {
+        this.DraggedOver = data;
+        this.StateHasChanged();
+    }
+}

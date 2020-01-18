@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
@@ -33,7 +34,13 @@ namespace NoteToSelf.Server
                 app.UseBlazorDebugging();
             }
 
-            app.UseStaticFiles();
+            StaticFileOptions options = new StaticFileOptions();
+            FileExtensionContentTypeProvider contentTypeProvider = (FileExtensionContentTypeProvider)options.ContentTypeProvider ??
+                new FileExtensionContentTypeProvider();
+            contentTypeProvider.Mappings.Add(".unityweb", "application/octet-stream");
+            options.ContentTypeProvider = contentTypeProvider;
+            app.UseStaticFiles(options);
+
             app.UseClientSideBlazorFiles<Client.Startup>();
 
             app.UseRouting();
