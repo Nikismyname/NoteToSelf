@@ -1,17 +1,13 @@
 ﻿@using NoteToSelf.Shared.Models
 
-<li 
-    class="draggable @invisibleClass" 
-    draggable="true" 
-    title="@Item.Id" 
-    @ondragstart="@(() => HandleDragStart(Item))"
+<li class="draggable @invisibleClass"
+    draggable="true"
+    title="@Item.Id"
+    @ondragstart="@((e) => HandleDragStart(e))"
     @ondragenter="@((e)=> HandleDragEnter(e))"
+    @ondragend="@((e)=> HandleDragEnd(e))"
 >
-    <p>TI: @Item.IsTopItem</p>
-    <p>ID: @Item.Id</p>
-    <p>Y: @Item.Y</p>
     <p class="description">@Item.Text</p>
-    <p class="last-updated"><small>Last Updated</small> @Item.LastUpdated.ToString("HH:mm.ss tt")</p>
 </li>
 
 @code {
@@ -22,23 +18,39 @@
 
     protected override void OnParametersSet()
     {
-        if (Item.IsTopItem && Item.Id != -1)
+        if (this.Item.IsTopItem)
         {
-            Console.WriteLine($"ID: {Item.Id}");
+            //Console.WriteLine($"ID: {Item.Id}");
             this.invisibleClass = "myInvisibleItem";
+        }
+        else
+        {
+            //Console.WriteLine($"ID Reversed: {Item.Id}");
+            this.invisibleClass = string.Empty;
         }
     }
 
-    private void HandleDragStart(ItemData selectedJob)
+    private void HandleDragStart(DragEventArgs args)
     {
-        MyContainer.CurrentItem = selectedJob;
+        this.MyContainer.SetCurrentItem(this.Item);
     }
 
     private void HandleDragEnter(DragEventArgs args)
     {
+        if (this.Item.Id != -1)
+        {
+            if (this.MyContainer.DraggedOver != null && this.Item != null && this.MyContainer.DraggedOver.Id == this.Item.Id) { return; }
+
+            this.MyContainer.SetDraggedOver(this.Item);
+        }
+    }
+
+    private void HandleDragEnd(DragEventArgs args)
+    {
         if (Item.Id != -1)
         {
-            MyContainer.TEST(Item);
+            this.MyContainer.RemoveDummyData();
+            this.MyContainer.DragEnd();
         }
     }
 }

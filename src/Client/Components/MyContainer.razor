@@ -2,9 +2,9 @@
 
 <div class="jobs-container">
     <CascadingValue Value="this">
-        <MyList X="1" DraggedOver="DraggedOver"/>
-        <MyList X="2" DraggedOver="DraggedOver"/>
-        <MyList X="3" DraggedOver="DraggedOver"/>
+        <MyList X="1" DraggedOver="DraggedOver" AddDummyItem="HandleAddDummyItem" RemoveDummyItems="HandleRemoveDummyItems" />
+        <MyList X="2" DraggedOver="DraggedOver" AddDummyItem="HandleAddDummyItem" RemoveDummyItems="HandleRemoveDummyItems" />
+        <MyList X="3" DraggedOver="DraggedOver" AddDummyItem="HandleAddDummyItem" RemoveDummyItems="HandleRemoveDummyItems" />
     </CascadingValue>
 </div>
 
@@ -15,9 +15,44 @@
 
     public ItemData DraggedOver { get; set; }
 
-    public void TEST(ItemData data)
+    public void SetCurrentItem(ItemData item)
+    {
+        this.CurrentItem = item;
+        this.Items = this.Items.Where(x => x.Id != this.CurrentItem.Id).ToList();
+        this.StateHasChanged();
+    }
+
+    public void SetDraggedOver(ItemData data)
     {
         this.DraggedOver = data;
+        Console.WriteLine("TEST:::::::::::::::::::::::::::::::::");
         this.StateHasChanged();
+    }
+
+    public void RemoveDummyData()
+    {
+        Console.WriteLine("C");
+        this.HandleRemoveDummyItems("Trigger State Has Changed!");
+    }
+
+    public void DragEnd()
+    {
+        this.Items.Add(this.CurrentItem);
+        this.StateHasChanged();
+    }
+
+    private void HandleAddDummyItem(ItemData item)
+    {
+        this.Items.Add(item);
+    }
+
+    private void HandleRemoveDummyItems(string notUsed)
+    {
+        this.Items = this.Items.Where(x => x.Id != -1).ToList();
+
+        if (notUsed == "Trigger State Has Changed!")
+        {
+            this.StateHasChanged();
+        }
     }
 }

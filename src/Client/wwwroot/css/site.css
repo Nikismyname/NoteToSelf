@@ -134,6 +134,7 @@ app {
 
 .dropzone {
     padding: 30px;
+    padding-top: 0px; 
     border: 1px dashed #75868a;
     list-style: none;
 }
@@ -230,6 +231,7 @@ app {
 }
 
 .myInvisibleItem{
-    background-color: red !important; 
+    background-color: white !important; 
+    border: 0px solid black !important; 
     /*color: white !important;*/
 }

@@ -8,7 +8,7 @@
         @ondragenter="HandleDragEnter"
         @ondragleave="HandleDragLeave">
 
-        @*<MyItem Item="topItem" />*@
+        <MyItem Item="topItem" />
         @foreach (var item in this.Items)
         {
             <MyItem Item="item" />
@@ -20,12 +20,18 @@
 
     #region DRAGGED_OVER
 
+    private int previousDraggedOverId = -3;
+
+    private int idForWitchDummyDataWasGeneratedLast = -3;
+
     private ItemData draggedOver;
 
     private ItemData topItem;
 
-    [Parameter] public int X { get; set; }
+    [Parameter] public EventCallback<ItemData> AddDummyItem { get; set; }
+    [Parameter] public EventCallback<string> RemoveDummyItems { get; set; }
 
+    [Parameter] public int X { get; set; }
     [CascadingParameter] MyContainer Container { get; set; }
     [Parameter]
     public ItemData DraggedOver
@@ -36,39 +42,7 @@
         }
         set
         {
-            draggedOver = value;
-
-            if(draggedOver != null && Container.CurrentItem != null && draggedOver.Id == Container.CurrentItem.Id)
-            {
-                Console.WriteLine("DRAG OVER SAME ITEM");
-                return;
-            }
-
-            if (this.Items != null)
-            {
-                this.Items = this.Items.Where(x => x.Id != -1).ToList();
-            }
-
-            if (value != null && value.Id != -1 && value.X == X)
-            {
-                float y = draggedOver.Y;
-
-                ItemData dummyData = new ItemData
-                {
-                    Y = y + 0.5f,
-                    X = X,
-                    Id = -1,
-                    LastUpdated = DateTime.Now,
-                    Text = "SOME TEXT",
-                    IsTopItem = true,
-                };
-
-                this.Items.Add(dummyData);
-
-                this.Items = this.Items.OrderBy(x => x.Y).ToList();
-
-                Console.WriteLine("ON DRAGGED SET:" + X);
-            }
+            DraggedOverSet(value);
         }
     }
 
@@ -95,36 +69,10 @@
 
     protected override void OnParametersSet()
     {
-        List<ItemData> newItems = Container.Items.Where(x => x.X == X).Where(x => x.Id != -1).OrderBy(x => x.Y).ToList();
-        List<ItemData> myItems = this.Items.Where(x => x.Id != -1).OrderBy(x => x.Y).ToList();
+        Console.WriteLine("OnParametersSet");
 
-        bool shouldUpdate = false;
-
-        if (newItems.Count == myItems.Count)
-        {
-            for (int i = 0; i < myItems.Count; i++)
-            {
-                ItemData myData = myItems[i];
-                ItemData newData = newItems[i];
-
-                if (myData.Id != newData.Id)
-                {
-                    shouldUpdate = true;
-                    break;
-                }
-            }
-        }
-        else
-        {
-            shouldUpdate = true;
-        }
-
-        if (shouldUpdate)
-        {
-            Console.WriteLine("UPDATING IGTEMS FROM OnParametersSet " + this.X);
-            this.Items.Clear();
-            this.Items = newItems;
-        }
+        this.Items.Clear();
+        this.Items = this.Container.Items.Where(x => x.X == this.X).OrderBy(x=>x.Y).ToList();
     }
 
     private void HandleDragEnter()
@@ -145,5 +93,55 @@
     private void HandleDragEnter(ItemData data)
     {
         ///TODO: Write this
+    }
+
+    private async void DraggedOverSet(ItemData value)
+    {
+        draggedOver = value;
+
+        if(value == null) { return; }
+
+        if(previousDraggedOverId == value.Id)
+        {
+            return;
+        }
+        else
+        {
+            previousDraggedOverId = value.Id;
+        }
+
+        if (draggedOver != null && Container.CurrentItem != null && draggedOver.Id == Container.CurrentItem.Id)
+        {
+            Console.WriteLine("DRAG OVER SAME ITEM");
+            return;
+        }
+
+        if (value.Id != -1 && value.X == X)
+        {
+            float y = value.Y;
+
+            ItemData dummyData = new ItemData
+            {
+                Y = y + 0.5f,
+                X = X,
+                Id = -1,
+                LastUpdated = DateTime.Now,
+                Text = "SOME TEXT",
+                IsTopItem = true,
+            };
+
+            if (value.Id != this.idForWitchDummyDataWasGeneratedLast)
+            {
+                await this.RemoveDummyItems.InvokeAsync("Whatever");
+            }
+            
+            this.idForWitchDummyDataWasGeneratedLast = value.Id;
+
+            await this.AddDummyItem.InvokeAsync(dummyData);
+
+            this.Items = this.Items.OrderBy(x => x.Y).ToList();
+
+            Console.WriteLine("ON DRAGGED SET:" + X);
+        }
     }
 }
