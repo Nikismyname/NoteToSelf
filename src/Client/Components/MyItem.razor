@@ -1,18 +1,31 @@
-﻿@using NoteToSelf.Shared.Models
+﻿@using NoteToSelf.Shared.Models;
+@implements IDisposable;
 
-<li class="draggable @invisibleClass"
-    draggable="true"
-    title="@Item.Id"
-    @ondragstart="@((e) => HandleDragStart(e))"
-    @ondragenter="@((e)=> HandleDragEnter(e))"
-    @ondragend="@((e)=> HandleDragEnd(e))"
->
-    <p class="description">@Item.Text</p>
-</li>
+@if (someVar)
+{
+    <li class="@parentClass">
+        <div class="draggable @(string.Join(' ', this.Item.ClassList))"
+             draggable="true"
+             title="@Item.Id"
+             @ondragstart="@((e) => HandleDragStart(e))"
+             @ondragenter="@((e) => HandleDragEnter(e))"
+             @ondragend="@((e) => HandleDragEnd(e))">
+            <p class="description">@Item.Text</p>
+        </div>
+    </li>
+}
+else
+{
+    <p draggable="true">Some</p>
+}
 
 @code {
     [CascadingParameter] MyContainer MyContainer { get; set; }
     [Parameter] public ItemData Item { get; set; }
+
+    private bool someVar = true;
+
+    private string parentClass = "";
 
     private string invisibleClass = string.Empty;
 
@@ -20,37 +33,35 @@
     {
         if (this.Item.IsTopItem)
         {
-            //Console.WriteLine($"ID: {Item.Id}");
-            this.invisibleClass = "myInvisibleItem";
+            this.Item.ClassList.Add("myInvisibleItem");
         }
         else
         {
-            //Console.WriteLine($"ID Reversed: {Item.Id}");
-            this.invisibleClass = string.Empty;
+            this.Item.ClassList.RemoveAll(x => x == "myInvisibleItem");
         }
     }
 
     private void HandleDragStart(DragEventArgs args)
     {
+        if (Item.Id == -1) { return; }
         this.MyContainer.SetCurrentItem(this.Item);
-    }
-
-    private void HandleDragEnter(DragEventArgs args)
-    {
-        if (this.Item.Id != -1)
-        {
-            if (this.MyContainer.DraggedOver != null && this.Item != null && this.MyContainer.DraggedOver.Id == this.Item.Id) { return; }
-
-            this.MyContainer.SetDraggedOver(this.Item);
-        }
+        this.Item.ClassList.Add("myBackgroundDark");
     }
 
     private void HandleDragEnd(DragEventArgs args)
     {
-        if (Item.Id != -1)
-        {
-            this.MyContainer.RemoveDummyData();
-            this.MyContainer.DragEnd();
-        }
+        if (Item.Id == -1) { return; }
+        this.Item.ClassList.RemoveAll(x => x == "myBackgroundDark");
+    }
+
+    private void HandleDragEnter(DragEventArgs args)
+    {
+        if (this.Item.Id == -1) { return; }
+        this.MyContainer.OnDragEnter(this.Item);
+    }
+
+    public void Dispose()
+    {
+        Console.WriteLine($"Disposed Item with ID: {this.Item.Id}");
     }
 }

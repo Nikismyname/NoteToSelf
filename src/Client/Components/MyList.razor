@@ -11,7 +11,7 @@
         <MyItem Item="topItem" />
         @foreach (var item in this.Items)
         {
-            <MyItem Item="item" />
+            <MyItem @key="item" Item="item" />
         }
     </ul>
 </div>

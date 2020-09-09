@@ -137,6 +137,7 @@ app {
     padding-top: 0px; 
     border: 1px dashed #75868a;
     list-style: none;
+    min-height: 10000px;
 }
 
 .no-drop {
@@ -231,7 +232,19 @@ app {
 }
 
 .myInvisibleItem{
-    background-color: white !important; 
+    background-color: red !important; 
     border: 0px solid black !important; 
     /*color: white !important;*/
+}
+
+.myOutOfView {
+    background-color: slategrey;
+}
+
+.myParentCose {
+    background-color: slategrey;
+}
+
+.myBackgroundDark {
+    background-color: black;
 }
